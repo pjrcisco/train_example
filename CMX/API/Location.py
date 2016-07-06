@@ -35,12 +35,16 @@ class LocationResource(object):
               "ssId": client["ssId"],
               "mapCoordinate": client["MapCoordinate"]
             })
-      apMacAddresses = []
-      for apMacAddress in self.aps:
-        apMacAddresses.append(apMacAddress)
-      loop = asyncio.new_event_loop()
-      asyncio.set_event_loop(loop)
-      loop.run_until_complete(self.get_ap_info(apMacAddresses))
+      aps_list = sorted(self.aps.items(), key=lambda x: x[1]['connectedDeviceCount'], reverse=True)
+      return {
+        "results": aps_list
+      }
+      #apMacAddresses = []
+      #for apMacAddress in self.aps:
+      #  apMacAddresses.append(apMacAddress)
+      #loop = asyncio.new_event_loop()
+      #asyncio.set_event_loop(loop)
+      #loop.run_until_complete(self.get_ap_info(apMacAddresses))
 
     async def get_ap_info(self, apMacAddresses):
       loop    = asyncio.get_event_loop()

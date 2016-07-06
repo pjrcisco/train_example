@@ -8,4 +8,4 @@ def new(uri, body={}, token=None, params=None, headers=None):
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }
-  return APIBase.Client("https://msesandbox.cisco.com", uri, headers, port=8081, body={}, verify=False, params=params)
+  return APIBase.Client("https://msesandbox.cisco.com", uri, headers, body={}, verify=False, params=params)

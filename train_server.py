@@ -58,5 +58,26 @@ def cmx_map_info():
     body = jsonify(**res)
     return(body, 200)
 
+@app.route(Routes.CMX_MAP_IMAGE_URL, methods=['POST'])
+def cmx_map_url():
+  valid = validate_cmx_request(request)
+  if valid != True:
+    return valid
+  else:
+    data = request.get_json()
+    res  = CMXMap.info(data["floorInfo"])
+    if res != None:
+      res   = CMXMap.image_source(res["Floor"]["Image"]["imageName"])
+      files = {'upload_file': res.content}
+      r     = requests.post("http://128.107.70.19/images/tmp", files=files)
+      json  = r.json()
+      url   = "http://128.107.70.19" + json["uri"]
+      body  = {"url": url}
+      body  = jsonify(**body)
+      return(body, 200)
+    else:
+      body = jsonify(**Errors.INVALID_REQUEST)
+      return(body, 400)
+
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=8082)
